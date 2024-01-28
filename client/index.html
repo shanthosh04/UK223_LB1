@@ -1,56 +1,55 @@
 <!DOCTYPE html>
 <html lang="de">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
-    <script src="scripts/client.js"></script>
+    <script src="scripts/client.js" defer></script>
     <title>uk223 Minitwitter</title>
-  </head>
-  
-  <body>
+</head>
+<body>
     <nav>
-      <div class="navigation">
-        <ul class="nav_s">
-          <a href="index.html">
-            <img class="logo" src="img/logo.png" alt=" logo" />
-          </a>
-          <li><a href="register.html">Registrieren</a></li>
-        </ul>
-      </div>
+        <div class="navigation">
+            <ul class="nav_s">
+                <a href="index.html">
+                    <img class="logo" src="img/logo.png" alt=" logo" />
+                </a>
+                <li><a href="register.html">Registrieren</a></li>
+            </ul>
+        </div>
     </nav>
     <h1>Minitwitter Login</h1>
 
-    <div class="chat-container">
-      <p>E-Mail</p>
-      <input 
-        type="username" 
-        id="loginUsername" 
-        placeholder="Please enter your username" 
-      />
-      <p>Password</p>
-      <input
-        type="password"
-        id="loginPassword"
-        placeholder="Please enter your password"
-      />
-      <button id="send">Send</button>
-    </div>
+    <form id="loginForm" class="chat-container">
+        <p>Username</p>
+        <input 
+            type="text" 
+            id="loginUsername"
+            placeholder="Please enter your username" 
+        />
+        <p>Password</p>
+        <input
+            type="password"
+            id="loginPassword"
+            placeholder="Please enter your password"
+        />
+        <button type="submit">Send</button>
+    </form>
 
     <div class="fixed">
-      <footer>
-        <table>
-          <tr>
-            <td>
-              <p>CsBe</p>
-              <p>Zieglerstrasse 64</p>
-              <p>3000, 14 Bern</p>
-              <p>csbe@gmail.com</p>
-            </td>
-          </tr>
-        </table>
-      </footer>
+        <footer>
+            <table>
+                <tr>
+                    <td>
+                        <p>CsBe</p>
+                        <p>Zieglerstrasse 64</p>
+                        <p>3000, 14 Bern</p>
+                        <p>csbe@gmail.com</p>
+                    </td>
+                </tr>
+            </table>
+        </footer>
     </div>
-  </body>
+</body>
 </html>

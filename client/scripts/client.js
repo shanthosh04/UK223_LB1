@@ -1,15 +1,9 @@
-/* eslint-disable no-undef */
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('send').addEventListener('click', () => {
-    const feed = 'feed.html';
-    window.location.href = `/${feed}`;
-  });
-
-  document.getElementById('loginForm').addEventListener('send', async (event) => {
+  document.getElementById('loginForm').addEventListener('submit', async (event) => {
     event.preventDefault();
 
-    const LoginUsername = document.getElementById('loginUsername').value;
-    const LoginPassword = document.getElementById('loginPassword').value;
+    const username = document.getElementById('loginUsername').value;
+    const password = document.getElementById('loginPassword').value;
 
     try {
       const response = await fetch('http://localhost:4200/login', {
@@ -17,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ LoginPassword, LoginUsername }),
+        body: JSON.stringify({ username, password }),
       });
 
       if (response.ok) {
@@ -25,10 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const { token } = result;
         console.log('Login erfolgreich.');
         localStorage.setItem('Token', token);
-        const feed = 'feed/feed.html';
-        window.location.href = `/${feed}`;
+        window.location.href = './feed.html';
       } else {
-        console.error('Fehler beim Login:', response.statusText);
+        console.error('Fehler beim login:', response.statusText);
       }
     } catch (error) {
       console.error('Netzwerkfehler:', error);

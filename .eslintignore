@@ -1,0 +1,4 @@
+# .eslintignore
+/client/
+
+/server/

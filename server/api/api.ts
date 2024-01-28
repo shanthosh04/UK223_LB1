@@ -1,9 +1,12 @@
 import { Request, Response, Express } from 'express';
-import { Database } from '../database';
+import { Database } from '../database/database';
 import * as jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 import bodyParser from 'body-parser'
 
 process.env.TOKEN_SECRET;
+
+dotenv.config();
 
 export class API {
   // Properties
@@ -15,7 +18,7 @@ export class API {
     this.app = app
     this.database = new Database();
     this.app.post('/register', this.register);
-    this.app.post('/login', this.login);
+    this.app.post('/login', this.checkUser);
   }
 
   private register = (req: Request, res: Response) => {
@@ -29,9 +32,11 @@ export class API {
     });
   }
 
-  private login = (req: Request, res: Response) => {
+  private checkUser = (req: Request, res: Response) => {
     bodyParser.json()(req, res, async () => {
-      const { password, username } = req.body;
+      const {  username, password } = req.body;
+  
+      console.log('Benutzerüberprüfung für:', username);
   
       // Hier überprüfen Sie, ob der Benutzer in der Datenbank existiert
       const userExists = await this.database.executeSQL(
@@ -46,5 +51,4 @@ export class API {
       }
     });
   }
-
 }
