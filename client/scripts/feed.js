@@ -49,7 +49,7 @@ async function postNewTweet() {
 
         if (response.ok) {
             tweetInput.value = '';
-            await loadAndDisplayTweets(); // Tweets neu laden
+            await loadAndDisplayTweets();
         } else {
             console.error('Fehler beim Senden des Tweets');
         }
@@ -71,7 +71,7 @@ async function updateTweet(tweetId) {
             });
 
             if (response.ok) {
-                await loadAndDisplayTweets(); // Tweets neu laden
+                await loadAndDisplayTweets();
             } else {
                 console.error('Fehler beim Bearbeiten des Tweets');
             }
@@ -88,7 +88,7 @@ async function removeTweet(tweetId) {
         });
 
         if (response.ok) {
-            await loadAndDisplayTweets(); // Tweets neu laden
+            await loadAndDisplayTweets();
         } else {
             console.error('Fehler beim Löschen des Tweets');
         }
