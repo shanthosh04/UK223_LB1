@@ -1,11 +1,37 @@
-if (location.host.includes('localhost')) {
-  // Load livereload script if we are on localhost
-  document.write(
-    '<script src="http://' +
-      (location.host || 'localhost').split(':')[0] +
-      ':35729/livereload.js?snipver=1"></' +
-      'script>'
-  )
-}
+/* eslint-disable no-undef */
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('send').addEventListener('click', () => {
+    const feed = 'feed.html';
+    window.location.href = `/${feed}`;
+  });
 
-console.log('This is a Test')
+  document.getElementById('loginForm').addEventListener('send', async (event) => {
+    event.preventDefault();
+
+    const LoginUsername = document.getElementById('loginUsername').value;
+    const LoginPassword = document.getElementById('loginPassword').value;
+
+    try {
+      const response = await fetch('http://localhost:4200/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ LoginPassword, LoginUsername }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        const { token } = result;
+        console.log('Login erfolgreich.');
+        localStorage.setItem('Token', token);
+        const feed = 'feed/feed.html';
+        window.location.href = `/${feed}`;
+      } else {
+        console.error('Fehler beim Login:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Netzwerkfehler:', error);
+    }
+  });
+});
