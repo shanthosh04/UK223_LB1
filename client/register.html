@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-    <script src="scripts/client.js"></script>
+    <link rel="stylesheet" href="style/style.css" />
+    <script src="scripts/register.js"></script>
     <title>uk223 Minitwitter</title>
   </head>
   
@@ -16,15 +16,25 @@
           <a href="index.html">
             <img class="logo" src="img/logo.png" alt=" logo" />
           </a>
-          <li><a href="register.html">Registrieren</a></li>
+          <li><a href="index.html">Login</a></li>
         </ul>
       </div>
     </nav>
-    <h1>Minitwitter Login</h1>
+    <h1>Minitwitter Registrieren</h1>
 
     <div class="chat-container">
+        <p>Username</p>
+        <input
+          type="username" 
+          id="username" 
+          placeholder="Please enter your username"
+      />
       <p>E-Mail</p>
-      <input type="email" id="email" placeholder="Please enter your email" />
+      <input
+        type="email" 
+        id="email" 
+        placeholder="Please enter your email"
+    />
       <p>Password</p>
       <input
         type="password"
