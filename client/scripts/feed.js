@@ -1,98 +1,97 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const sendButton = document.getElementById('send');
-    const tweetInput = document.getElementById('tweetInput');
+    const postWindow = document.getElementById('Feedwindow');
 
-    sendButton.addEventListener('click', async () => {
-        await postNewTweet();
-    });
-
-    loadAndDisplayTweets();
-});
-
-async function loadAndDisplayTweets() {
-    try {
-        const response = await fetch('http://localhost:4200/tweets');
-        if (response.ok) {
-            const tweets = await response.json();
-            const tweetsContainer = document.getElementById('tweetsContainer');
-            tweetsContainer.innerHTML = '';
-            tweets.forEach(tweet => {
-                const tweetElement = document.createElement('div');
-                tweetElement.innerHTML = `
-                    <p><strong>${tweet.username}:</strong> ${tweet.content}</p>
-                    <button onclick="updateTweet(${tweet.id})">Bearbeiten</button>
-                    <button onclick="removeTweet(${tweet.id})">Löschen</button>
-                `;
-                tweetsContainer.appendChild(tweetElement);
-            });
-        }
-    } catch (error) {
-        console.error('Fehler bei der Anzeige der Tweets', error);
-    }
-}
-
-async function postNewTweet() {
-    const tweetContent = tweetInput.value;
-    if (!tweetContent) {
-        alert('Bitte geben Sie einen Tweet ein.');
-        return;
-    }
-
-    try {
-        const response = await fetch('http://localhost:4200/tweet', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ content: tweetContent })
-        });
-
-        if (response.ok) {
-            tweetInput.value = '';
-            await loadAndDisplayTweets();
-        } else {
-            console.error('Fehler beim Senden des Tweets');
-        }
-    } catch (error) {
-        console.error('Fehler beim Senden des Tweets', error);
-    }
-}
-
-async function updateTweet(tweetId) {
-    const newContent = prompt('Tweet bearbeiten:');
-    if (newContent) {
+    // Function to show posts
+    const showTweets = async () => {
         try {
-            const response = await fetch(`http://localhost:4200/tweet/${tweetId}`, {
-                method: 'PUT',
+            const response = await fetch('http://localhost:4200/getPost', {
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ content: newContent })
             });
 
             if (response.ok) {
-                await loadAndDisplayTweets();
+                const result = await response.json();
+                postWindow.innerHTML = ''; // Clear existing posts
+                result.allpost.forEach(post => {
+                    postWindow.innerHTML += `
+                        <div class="post">
+                            <div>
+                                <span class="username">${post.username}</span>
+                                <p class="content">${post.content}</p>
+                            </div>
+                            <div class="actions">
+                                <button class="edit" data-post-id="${post.id}">Edit</button>
+                                <button class="delete" data-post-id="${post.id}">Delete</button>
+                            </div>
+                        </div>`;
+                });
             } else {
-                console.error('Fehler beim Bearbeiten des Tweets');
+                console.error('Error fetching posts:', response.statusText);
             }
         } catch (error) {
-            console.error('Fehler beim Bearbeiten des Tweets', error);
+            console.error('Network error:', error);
         }
-    }
-}
+    };
 
-async function removeTweet(tweetId) {
-    try {
-        const response = await fetch(`http://localhost:4200/tweet/${tweetId}`, {
-            method: 'DELETE'
-        });
+    // Function to handle post creation
+    document.getElementById('postButton').addEventListener('click', async (event) => {
+        event.preventDefault();
+        const postMessage = document.getElementById('postTextarea').value;
+        const jwtToken = localStorage.getItem('Token');
 
-        if (response.ok) {
-            await loadAndDisplayTweets();
-        } else {
-            console.error('Fehler beim Löschen des Tweets');
+        try {
+            const response = await fetch('http://localhost:4200/createPost', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ postMessage, jwtToken }),
+            });
+
+            if (response.ok) {
+                console.log('Post created successfully');
+                showTweets(); // Reload the posts
+            } else {
+                console.error('Error creating post:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Network error:', error);
         }
-    } catch (error) {
-        console.error('Fehler beim Löschen des Tweets', error);
-    }
-}
+    });
+
+    // Event delegation for edit and delete actions
+    postWindow.addEventListener('click', async (event) => {
+        const postId = event.target.getAttribute('data-post-id');
+
+        if (event.target.classList.contains('delete')) {
+            const jwtToken = localStorage.getItem('Token');
+
+            try {
+                const response = await fetch('http://localhost:4200/deletePost', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ postId, jwtToken }),
+                });
+
+                if (response.ok) {
+                    console.log('Post deleted successfully');
+                    showTweets(); // Reload the posts
+                } else {
+                    console.error('Error deleting post:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Network error:', error);
+            }
+        }
+
+        // Handling for edit action...
+        // TODO: Implement edit functionality
+    });
+
+    // Initial loading of tweets
+    showTweets();
+});
